@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+       <item
+            android:id="@+id/dashboard"
+            android:enabled="true"
+            android:icon="@drawable/ic_baseline_crop_16_9_24"
+            android:title="@string/text_dashboard"/>
+        <item
+            android:id="@+id/expense"
+            android:enabled="true"
+            android:icon="@drawable/ic_baseline_explore_24"
+            android:title="@string/text_expense"/>
+
+</menu>
