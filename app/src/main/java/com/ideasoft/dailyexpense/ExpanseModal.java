@@ -1,12 +1,14 @@
 package com.ideasoft.dailyexpense;
 
+import java.util.Date;
+
 public class ExpanseModal {
 
     // variables for our expanseType,
     // expanseAmount, expanseDate and expanseTime, id.
     private String expanseType;
     private String expanseAmount;
-    private String expanseDate;
+    private Date expanseDate;
     private String expanseTime;
     private int id;
 
@@ -28,13 +30,6 @@ public class ExpanseModal {
         this.expanseAmount = expanseAmount;
     }
 
-    public String getExpanseDate() {
-        return expanseDate;
-    }
-
-    public void setExpanseDate(String expanseDate) {
-        this.expanseDate = expanseDate;
-    }
 
     public String getExpanseTime() {
         return expanseTime;
@@ -52,8 +47,16 @@ public class ExpanseModal {
         this.id = id;
     }
 
+    public Date getExpanseDate() {
+        return expanseDate;
+    }
+
+    public void setExpanseDate(Date expanseDate) {
+        this.expanseDate = expanseDate;
+    }
+
     // constructor
-    public ExpanseModal(String expanseType, String expanseAmount, String expanseDate, String expanseTime) {
+    public ExpanseModal(String expanseType, String expanseAmount, Date expanseDate, String expanseTime) {
         this.expanseType = expanseType;
         this.expanseAmount = expanseAmount;
         this.expanseDate = expanseDate;

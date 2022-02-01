@@ -44,10 +44,6 @@ public class ExpensesFragment extends Fragment {
         // list from db handler class.
         expanseModalArrayList = dbHandler.readExpanse();
 
-//        // getting our expanse array
-//        // list from db handler class.
-//        expanseModalArrayList = dbHandler.readExpanse();
-
         // on below line passing our array list to our adapter class.
         expanseAdapter = new ExpanseAdapter(expanseModalArrayList, getContext());
         expansesRecycler = rootView.findViewById(R.id.expense_recycler);

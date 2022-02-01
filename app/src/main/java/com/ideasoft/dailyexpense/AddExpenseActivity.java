@@ -1,21 +1,28 @@
 package com.ideasoft.dailyexpense;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class AddExpenseActivity extends AppCompatActivity {
 
-    EditText expanseType, expanseAmount, expanseDate, expanseTime;
-    Button expanseAdd;
+    EditText expanseType, expanseAmount, expanseTime;
+    Button expanseAdd, expanseDate;
     private DBHandler dbHandler;
+    private Date date;
 
 
     @Override
@@ -33,11 +40,17 @@ public class AddExpenseActivity extends AppCompatActivity {
 
         expanseAdd = findViewById(R.id.expenseAdd);
 
+        expanseDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                buttonDate_onClick(view);
+            }
+        });
+
 
         // creating a new dbhandler class
         // and passing our context to it.
         dbHandler = new DBHandler(AddExpenseActivity.this);
-
 
 
         expanseAdd.setOnClickListener(new View.OnClickListener() {
@@ -47,16 +60,13 @@ public class AddExpenseActivity extends AppCompatActivity {
                 // below line is to get data from all edit text fields.
                 String expanse = expanseType.getText().toString();
                 String amount = expanseAmount.getText().toString();
-                String date = expanseDate.getText().toString();
                 String time = expanseTime.getText().toString();
 
 
-
                 // validating if the text fields are empty or not.
-                if (expanse.isEmpty() && amount.isEmpty() && date.isEmpty() ) {
+                if (expanse.isEmpty() && amount.isEmpty()) {
                     expanseType.setError("Please Enter Your Expanse Type");
                     expanseAmount.setError("Please Enter Your Expanse Amount");
-                    expanseDate.setError("Please Select A Date ");
                     expanseTime.setError("Please Select Time ");
                     Toast.makeText(AddExpenseActivity.this, "Please enter all the data..", Toast.LENGTH_SHORT).show();
                     return;
@@ -72,7 +82,6 @@ public class AddExpenseActivity extends AppCompatActivity {
 
                 expanseType.setText("");
                 expanseAmount.setText("");
-                expanseDate.setText("");
                 expanseTime.setText("");
 
 
@@ -80,7 +89,30 @@ public class AddExpenseActivity extends AppCompatActivity {
         });
 
 
+    }
 
+
+    public void buttonDate_onClick(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(R.layout.date_picker_dialog);
+        AlertDialog alertDialog = builder.show();
+        CalendarView calendarView = alertDialog.findViewById(R.id.calendarViewDate);
+        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+                calendarView_onSelectedDayChange(view, year, month, dayOfMonth);
+            }
+        });
+    }
+
+    private void calendarView_onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            date = simpleDateFormat.parse(year + "-" + month + "-" + dayOfMonth + "-");
+
+        } catch (Exception e) {
+            date = null;
+        }
     }
 
     @Override
