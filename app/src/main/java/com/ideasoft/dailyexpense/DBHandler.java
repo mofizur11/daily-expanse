@@ -18,7 +18,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String DB_NAME = "expanse_database";
 
     // below int is our database version
-    private static final int DB_VERSION = 2;
+    private static final int DB_VERSION = 3;
 
     // below variable is for our table name.
     private static final String TABLE_NAME = "expanse_table";
@@ -63,15 +63,12 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     // this method is use to add new expanse to our sqlite database.
-    public void addNewExpanse(String expanseType, String expanseAmount, Date expanseDate, String expanseTime) {
+    public void addNewExpanse(String expanseType, String expanseAmount, String expanseDate, String expanseTime) {
 
         // on below line we are creating a variable for
         // our sqlite database and calling writable method
         // as we are writing data in our database.
         SQLiteDatabase db = this.getWritableDatabase();
-
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd " +
-                "HH:mm:ss");
 
         // on below line we are creating a
         // variable for content values.
@@ -81,7 +78,7 @@ public class DBHandler extends SQLiteOpenHelper {
         // along with its key and value pair.
         values.put(EXPANSE_TYPE, expanseType);
         values.put(EXPANSE_AMOUNT, expanseAmount);
-        values.put(EXPANSE_DATE, simpleDateFormat.format(expanseDate));
+        values.put(EXPANSE_DATE, expanseDate);
         values.put(EXPANSE_TIME, expanseTime);
 
         // after adding all values we are passing
@@ -97,37 +94,34 @@ public class DBHandler extends SQLiteOpenHelper {
     public ArrayList<ExpanseModal> readExpanse() {
         // on below line we are creating a
         // database for reading our database.
-     try {
-         SQLiteDatabase db = this.getReadableDatabase();
+        try {
+            SQLiteDatabase db = this.getReadableDatabase();
 
 
-         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd " +
-                 "HH:mm:sss");
+            // on below line we are creating a cursor with query to read data from database.
+            Cursor cursorExpanse = db.rawQuery("SELECT * FROM " + TABLE_NAME + " ORDER BY id DESC ", null);
 
-         // on below line we are creating a cursor with query to read data from database.
-         Cursor cursorExpanse = db.rawQuery("SELECT * FROM " + TABLE_NAME + " ORDER BY id DESC ", null);
+            // on below line we are creating a new array list.
+            ArrayList<ExpanseModal> expanseModalArrayList = new ArrayList<>();
 
-         // on below line we are creating a new array list.
-         ArrayList<ExpanseModal> expanseModalArrayList = new ArrayList<>();
-
-         // moving our cursor to first position.
-         if (cursorExpanse.moveToFirst()) {
-             do {
-                 // on below line we are adding the data from cursor to our array list.
-                 expanseModalArrayList.add(new ExpanseModal(cursorExpanse.getString(0),
-                         cursorExpanse.getString(1),
-                         simpleDateFormat.parse(cursorExpanse.getString(3)),
-                         cursorExpanse.getString(3)));
-             } while (cursorExpanse.moveToNext());
-             // moving our cursor to next.
-         }
-         // at last closing our cursor
-         // and returning our array list.
-         cursorExpanse.close();
-         return expanseModalArrayList;
-     }catch (Exception e){
-         return null;
-     }
+            // moving our cursor to first position.
+            if (cursorExpanse.moveToFirst()) {
+                do {
+                    // on below line we are adding the data from cursor to our array list.
+                    expanseModalArrayList.add(new ExpanseModal(cursorExpanse.getString(1),
+                            cursorExpanse.getString(2),
+                            cursorExpanse.getString(3),
+                            cursorExpanse.getString(4)));
+                } while (cursorExpanse.moveToNext());
+                // moving our cursor to next.
+            }
+            // at last closing our cursor
+            // and returning our array list.
+            cursorExpanse.close();
+            return expanseModalArrayList;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @Override

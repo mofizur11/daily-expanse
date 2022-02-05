@@ -37,13 +37,10 @@ public class ExpanseAdapter extends RecyclerView.Adapter<ExpanseAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         // on below line we are setting data
         // to our views of recycler view item.
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd " +
-                "HH:mm:sss");
         ExpanseModal modal = expanseModalArrayList.get(position);
         holder.expanseType.setText(modal.getExpanseType());
         holder.expanseAmount.setText(modal.getExpanseAmount());
-      //  holder.expanseDate.setText((CharSequence) modal.getExpanseDate());
-        holder.expanseDate.setText(simpleDateFormat.format(modal.getExpanseDate()));
+        holder.expanseDate.setText((CharSequence) modal.getExpanseDate());
         holder.expanseTime.setText(modal.getExpanseTime());
     }
 

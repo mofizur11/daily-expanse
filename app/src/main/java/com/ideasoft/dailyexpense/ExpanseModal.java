@@ -8,9 +8,17 @@ public class ExpanseModal {
     // expanseAmount, expanseDate and expanseTime, id.
     private String expanseType;
     private String expanseAmount;
-    private Date expanseDate;
+    private String expanseDate;
     private String expanseTime;
     private int id;
+
+    // constructor
+    public ExpanseModal(String expanseType, String expanseAmount, String expanseDate, String expanseTime) {
+        this.expanseType = expanseType;
+        this.expanseAmount = expanseAmount;
+        this.expanseDate = expanseDate;
+        this.expanseTime = expanseTime;
+    }
 
     // creating getter and setter methods
 
@@ -47,19 +55,11 @@ public class ExpanseModal {
         this.id = id;
     }
 
-    public Date getExpanseDate() {
+    public String getExpanseDate() {
         return expanseDate;
     }
 
-    public void setExpanseDate(Date expanseDate) {
+    public void setExpanseDate(String expanseDate) {
         this.expanseDate = expanseDate;
-    }
-
-    // constructor
-    public ExpanseModal(String expanseType, String expanseAmount, Date expanseDate, String expanseTime) {
-        this.expanseType = expanseType;
-        this.expanseAmount = expanseAmount;
-        this.expanseDate = expanseDate;
-        this.expanseTime = expanseTime;
     }
 }
