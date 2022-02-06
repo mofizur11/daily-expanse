@@ -1,10 +1,14 @@
 package com.ideasoft.dailyexpense;
 
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +23,7 @@ public class ExpanseAdapter extends RecyclerView.Adapter<ExpanseAdapter.ViewHold
     // variable for our array list and context
     private ArrayList<ExpanseModal> expanseModalArrayList;
     private Context context;
+    private DBHandler dbHandler;
 
     // constructor
     public ExpanseAdapter(ArrayList<ExpanseModal> expanseModalArrayList, Context context) {
@@ -35,33 +40,66 @@ public class ExpanseAdapter extends RecyclerView.Adapter<ExpanseAdapter.ViewHold
         return new ViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         // on below line we are setting data
         // to our views of recycler view item.
-        ExpanseModal modal = expanseModalArrayList.get(position);
+        final ExpanseModal modal = expanseModalArrayList.get(position);
         holder.expanseType.setText(modal.getExpanseType());
         holder.expanseAmount.setText(modal.getExpanseAmount());
         holder.expanseDate.setText(modal.getExpanseDate());
         holder.expanseTime.setText(modal.getExpanseTime());
+        holder.expenseItemId.setText("" + modal.getId());
 
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context,ExpenseDetailsActivity.class);
-                intent.putExtra("expenseType",modal.getExpanseType());
-                intent.putExtra("expenseAmount",modal.getExpanseAmount());
-                intent.putExtra("expenseDate",modal.getExpanseDate());
-                intent.putExtra("expenseTime",modal.getExpanseTime());
+                Intent intent = new Intent(context, ExpenseDetailsActivity.class);
+                intent.putExtra("expenseType", modal.getExpanseType());
+                intent.putExtra("expenseAmount", modal.getExpanseAmount());
+                intent.putExtra("expenseDate", modal.getExpanseDate());
+                intent.putExtra("expenseTime", modal.getExpanseTime());
                 context.startActivity(intent);
             }
         });
 
-        holder.expanseType.setOnClickListener(new View.OnClickListener() {
+        holder.expenseDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "OK", Toast.LENGTH_SHORT).show();
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setCancelable(false);
+                builder.setTitle("Are You Sure?");
+                builder.setMessage("You are went to delete is expense");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dbHandler = new DBHandler(context);
+                        dbHandler.delete_expense(modal.getId());
+                        expanseModalArrayList.remove(position);
+                        notifyDataSetChanged();
+
+                        Toast.makeText(context, "Delete Successfully", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+            }
+        });
+
+        holder.expenseUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "Coming Soon...", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -77,7 +115,8 @@ public class ExpanseAdapter extends RecyclerView.Adapter<ExpanseAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         // creating variables for our text views.
-        private TextView expanseType, expanseAmount, expanseDate, expanseTime;
+        private TextView expanseType, expanseAmount, expanseDate, expanseTime, expenseItemId;
+        private ImageView expenseUpdate, expenseDelete;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -86,6 +125,9 @@ public class ExpanseAdapter extends RecyclerView.Adapter<ExpanseAdapter.ViewHold
             expanseAmount = itemView.findViewById(R.id.daily_amount);
             expanseDate = itemView.findViewById(R.id.daily_date);
             expanseTime = itemView.findViewById(R.id.daily_time);
+            expenseItemId = itemView.findViewById(R.id.expense_item_id);
+            expenseUpdate = itemView.findViewById(R.id.update);
+            expenseDelete = itemView.findViewById(R.id.delete);
         }
     }
 }

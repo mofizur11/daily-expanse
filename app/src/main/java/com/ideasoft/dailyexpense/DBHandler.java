@@ -7,9 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class DBHandler extends SQLiteOpenHelper {
 
@@ -19,13 +17,10 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String DB_NAME = "expanse_database";
 
     // below int is our database version
-    private static final int DB_VERSION = 3;
+    private static final int DB_VERSION = 2;
 
     // below variable is for our table name.
     private static final String TABLE_NAME = "expanse_table";
-
-    // below variable is for our id column.
-    private static final String ID_COL = "id";
 
     // below variable is for our expanse type column
     private static final String EXPANSE_TYPE = "expanse";
@@ -38,6 +33,11 @@ public class DBHandler extends SQLiteOpenHelper {
 
     // below variable is for our expanse time column.
     private static final String EXPANSE_TIME = "time";
+
+
+    // below variable is for our id column.
+    private static final String ID_COL = "id";
+
 
     // creating a constructor for our database handler.
     public DBHandler(Context context) {
@@ -109,7 +109,8 @@ public class DBHandler extends SQLiteOpenHelper {
             if (cursorExpanse.moveToFirst()) {
                 do {
                     // on below line we are adding the data from cursor to our array list.
-                    expanseModalArrayList.add(new ExpanseModal(cursorExpanse.getString(1),
+                    expanseModalArrayList.add(new ExpanseModal(cursorExpanse.getInt(0),
+                            cursorExpanse.getString(1),
                             cursorExpanse.getString(2),
                             cursorExpanse.getString(3),
                             cursorExpanse.getString(4)));
@@ -127,19 +128,19 @@ public class DBHandler extends SQLiteOpenHelper {
 
 
     @SuppressLint("Range")
-  public String fetch_amount(int id) {
+    public String fetch_amount(int id) {
 
         SQLiteDatabase sq = this.getReadableDatabase();
 
-        String q = "SELECT "+EXPANSE_AMOUNT+" FROM "+TABLE_NAME+" WHERE "+ID_COL+" = "+id;
+        String q = "SELECT " + EXPANSE_AMOUNT + " FROM " + TABLE_NAME + " WHERE " + ID_COL + " = " + id;
 
         Cursor c = sq.rawQuery(q, null);
         String s = "";
 
         c.moveToFirst();
 
-        if(c.moveToFirst()) {
-            s = c.getString(c.getColumnIndex(EXPANSE_AMOUNT+""));
+        if (c.moveToFirst()) {
+            s = c.getString(c.getColumnIndex(EXPANSE_AMOUNT + ""));
         }
 
         return s;
@@ -153,11 +154,9 @@ public class DBHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    int delete_expense(int id){
 
-        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-
-        return sqLiteDatabase.delete(TABLE_NAME, ID_COL+" = ?", new String[] {String.valueOf(id)});
+    public void delete_expense(int id) {
+        getWritableDatabase().delete(TABLE_NAME, "id=?", new String[]{String.valueOf((id))});
 
     }
 

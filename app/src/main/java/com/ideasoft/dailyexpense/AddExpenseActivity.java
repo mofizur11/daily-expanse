@@ -100,12 +100,7 @@ public class AddExpenseActivity extends AppCompatActivity {
                 Toast.makeText(AddExpenseActivity.this, "Expanse added Successfully!", Toast.LENGTH_SHORT).show();
 
 
-                expanseType.setText("");
-                expanseAmount.setText("");
-                expenseDate.setText("");
-                expanseTime.setText("");
-
-
+                finish();
             }
         });
 
