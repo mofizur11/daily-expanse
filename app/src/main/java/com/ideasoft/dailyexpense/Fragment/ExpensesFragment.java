@@ -34,6 +34,7 @@ public class ExpensesFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        getActivity().setTitle("All Expenses");
         View rootView = inflater.inflate(R.layout.expenses_fragment, container, false);
 
         // initializing our all variables.

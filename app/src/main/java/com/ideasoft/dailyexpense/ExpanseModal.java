@@ -12,6 +12,9 @@ public class ExpanseModal {
     private String expanseTime;
     private int id;
 
+    public ExpanseModal() {
+    }
+
     // constructor
     public ExpanseModal(String expanseType, String expanseAmount, String expanseDate, String expanseTime) {
         this.expanseType = expanseType;

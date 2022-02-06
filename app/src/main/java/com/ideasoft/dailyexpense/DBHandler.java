@@ -1,5 +1,6 @@
 package com.ideasoft.dailyexpense;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -124,10 +125,41 @@ public class DBHandler extends SQLiteOpenHelper {
         }
     }
 
+
+    @SuppressLint("Range")
+  public String fetch_amount(int id) {
+
+        SQLiteDatabase sq = this.getReadableDatabase();
+
+        String q = "SELECT "+EXPANSE_AMOUNT+" FROM "+TABLE_NAME+" WHERE "+ID_COL+" = "+id;
+
+        Cursor c = sq.rawQuery(q, null);
+        String s = "";
+
+        c.moveToFirst();
+
+        if(c.moveToFirst()) {
+            s = c.getString(c.getColumnIndex(EXPANSE_AMOUNT+""));
+        }
+
+        return s;
+
+    }
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // this method is called to check if the table exists already.
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(db);
     }
+
+    int delete_expense(int id){
+
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+
+        return sqLiteDatabase.delete(TABLE_NAME, ID_COL+" = ?", new String[] {String.valueOf(id)});
+
+    }
+
+
 }

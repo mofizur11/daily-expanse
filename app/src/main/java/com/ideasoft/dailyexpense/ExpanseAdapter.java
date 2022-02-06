@@ -1,10 +1,12 @@
 package com.ideasoft.dailyexpense;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,8 +42,30 @@ public class ExpanseAdapter extends RecyclerView.Adapter<ExpanseAdapter.ViewHold
         ExpanseModal modal = expanseModalArrayList.get(position);
         holder.expanseType.setText(modal.getExpanseType());
         holder.expanseAmount.setText(modal.getExpanseAmount());
-        holder.expanseDate.setText((CharSequence) modal.getExpanseDate());
+        holder.expanseDate.setText(modal.getExpanseDate());
         holder.expanseTime.setText(modal.getExpanseTime());
+
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context,ExpenseDetailsActivity.class);
+                intent.putExtra("expenseType",modal.getExpanseType());
+                intent.putExtra("expenseAmount",modal.getExpanseAmount());
+                intent.putExtra("expenseDate",modal.getExpanseDate());
+                intent.putExtra("expenseTime",modal.getExpanseTime());
+                context.startActivity(intent);
+            }
+        });
+
+        holder.expanseType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "OK", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
     }
 
     @Override

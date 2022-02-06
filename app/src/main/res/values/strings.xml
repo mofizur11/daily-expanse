@@ -6,4 +6,8 @@
     <string name="text_expense">Expense</string>
     <string name="text_add_expense">Add Expense</string>
     <string name="daily_amount">Daily Amount</string>
+    <string name="expense_amount">Expense Amount</string>
+    <string name="expense_type">Expense Type</string>
+    <string name="expense_date">Expense Date</string>
+    <string name="expense_time">Expense Time</string>
 </resources>
