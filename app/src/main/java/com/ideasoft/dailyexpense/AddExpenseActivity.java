@@ -9,6 +9,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,6 +33,7 @@ public class AddExpenseActivity extends AppCompatActivity {
     EditText expanseType, expanseAmount, expenseDate, expanseTime;
     Button expanseAdd;
     private DBHandler dbHandler;
+    int updateId;
 
 
     @Override
@@ -48,7 +50,6 @@ public class AddExpenseActivity extends AppCompatActivity {
         expanseTime = findViewById(R.id.expanseTime);
 
         expanseAdd = findViewById(R.id.expenseAdd);
-
 
 
         expenseDate.setOnClickListener(new View.OnClickListener() {
@@ -105,8 +106,41 @@ public class AddExpenseActivity extends AppCompatActivity {
         });
 
 
+        update_expense();
+
     }
 
+    private void update_expense() {
+        String expenseId = getIntent().getStringExtra("expenseId");
+        String expense_type = getIntent().getStringExtra("expenseUpdateType");
+        String expense_amount = getIntent().getStringExtra("expenseUpdateAmount");
+        String expense_date = getIntent().getStringExtra("expenseUpdateDate");
+        String expense_time = getIntent().getStringExtra("expenseUpdateTime");
+
+        if (expenseId != null) {
+            getSupportActionBar().setTitle("Update Expense");
+            updateId = Integer.parseInt(expenseId);
+            expanseType.setText(expense_type);
+            expanseAmount.setText(expense_amount);
+            expenseDate.setText(expense_date);
+            expanseTime.setText(expense_time);
+
+            expanseAdd.setText("Update Expense");
+            expanseAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String expanse = expanseType.getText().toString();
+                    String amount = expanseAmount.getText().toString();
+                    String date = expenseDate.getText().toString();
+                    String time = expanseTime.getText().toString();
+
+                    dbHandler.update_expense(updateId, expanse, amount, date, time);
+
+                    Toast.makeText(AddExpenseActivity.this, "Updated Successfully!", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
 
 
     private void chooseDate() {
@@ -140,7 +174,7 @@ public class AddExpenseActivity extends AppCompatActivity {
     }
 
 
-    private void chooseTime(){
+    private void chooseTime() {
         Calendar mCurrentTime = Calendar.getInstance();
         int hour = mCurrentTime.get(Calendar.HOUR_OF_DAY);
         int minute = mCurrentTime.get(Calendar.MINUTE);
@@ -151,10 +185,10 @@ public class AddExpenseActivity extends AppCompatActivity {
             @SuppressLint("SetTextI18n")
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-             //   expanseTime.setText(selectedHour + ":" + selectedMinute);
+                //   expanseTime.setText(selectedHour + ":" + selectedMinute);
                 String time;
-                if (selectedHour>=0 && selectedHour<12){
-                     time = selectedHour + " : "+selectedMinute+ " AM";
+                if (selectedHour >= 0 && selectedHour < 12) {
+                    time = selectedHour + " : " + selectedMinute + " AM";
                 } else {
                     if (selectedHour != 12) {
                         selectedHour = selectedHour - 12;

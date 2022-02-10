@@ -99,6 +99,13 @@ public class ExpanseAdapter extends RecyclerView.Adapter<ExpanseAdapter.ViewHold
         holder.expenseUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(context, AddExpenseActivity.class);
+                intent.putExtra("expenseId", modal.getId());
+                intent.putExtra("expenseUpdateType", modal.getExpanseType());
+                intent.putExtra("expenseUpdateAmount", modal.getExpanseAmount());
+                intent.putExtra("expenseUpdateDate", modal.getExpanseDate());
+                intent.putExtra("expenseUpdateTime", modal.getExpanseTime());
+                context.startActivity(intent);
                 Toast.makeText(context, "Coming Soon...", Toast.LENGTH_SHORT).show();
             }
         });
