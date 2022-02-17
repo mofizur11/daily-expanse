@@ -17,7 +17,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String DB_NAME = "expanse_database";
 
     // below int is our database version
-    private static final int DB_VERSION = 4;
+    private static final int DB_VERSION = 5;
 
     // below variable is for our table name.
     private static final String TABLE_NAME = "expanse_table";
@@ -160,13 +160,13 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
 
-   public void delete_expense(int id) {
-        getWritableDatabase().delete(TABLE_NAME, ID_COL+"=?", new String[]{String.valueOf(id)});
+    public void delete_expense(int id) {
+        getWritableDatabase().delete(TABLE_NAME, ID_COL + "=?", new String[]{String.valueOf(id)});
 
     }
 
 
-   public void update_expense(int id, String expenseType, String expenseAmount, String expenseDate, String expenseTime) {
+    public void update_expense(int id, String expenseType, String expenseAmount, String expenseDate, String expenseTime) {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(ID_COL, id);
@@ -174,21 +174,20 @@ public class DBHandler extends SQLiteOpenHelper {
         contentValues.put(EXPANSE_AMOUNT, expenseAmount);
         contentValues.put(EXPANSE_DATE, expenseDate);
         contentValues.put(EXPANSE_TIME, expenseTime);
-        sqLiteDatabase.update(TABLE_NAME, contentValues, ID_COL+"=?", new String[]{String.valueOf(id)});
+        sqLiteDatabase.update(TABLE_NAME, contentValues, ID_COL + "=?", new String[]{String.valueOf(id)});
         sqLiteDatabase.close();
     }
 
 
-    public Cursor calculateAllAmount(){
+    public Cursor calculateAllAmount() {
         SQLiteDatabase sq = getReadableDatabase();
-        return sq.rawQuery("SELECT SUM("+EXPANSE_AMOUNT+") AS TOTAL FROM "+TABLE_NAME,null);
+        return sq.rawQuery("SELECT SUM(" + EXPANSE_AMOUNT + ") AS TOTALAMOUNT FROM " + TABLE_NAME, null);
     }
 
-    public Cursor showAmount(String fromDate,String toDate){
-
+    public Cursor showAmount(String fromDate, String toDate) {
         SQLiteDatabase sq = getReadableDatabase();
-        return sq.rawQuery("SELECT SUM("+EXPANSE_AMOUNT+") AS MYTOTAL FROM expanse_table WHERE date>=? and date<?",
-                new String[] { String.valueOf(fromDate), String.valueOf(toDate)});
+        return sq.rawQuery("SELECT SUM(" + EXPANSE_AMOUNT + ") AS MYTOTAL FROM expanse_table WHERE date>=? and date<?",
+                new String[]{fromDate, toDate});
 
     }
 

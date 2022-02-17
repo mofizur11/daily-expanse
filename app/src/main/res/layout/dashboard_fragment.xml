@@ -7,9 +7,8 @@
     android:gravity="center"
     android:orientation="vertical">
 
-
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/outline_edit_text"
+        android:id="@+id/editText01"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="180dp"
         android:layout_height="wrap_content"
@@ -30,7 +29,7 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/to_date"
+        android:id="@+id/to_Date"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="180dp"
         android:layout_height="wrap_content"
@@ -76,6 +75,7 @@
         android:textColor="@color/white"
         android:textSize="40dp"
         android:textStyle="bold" />
+
 
 
 </LinearLayout>

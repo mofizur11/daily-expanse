@@ -8,8 +8,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,8 +23,10 @@ import com.ideasoft.dailyexpense.DBHandler;
 import com.ideasoft.dailyexpense.ExpanseModal;
 import com.ideasoft.dailyexpense.R;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class DashboardFragment extends Fragment {
 
@@ -29,6 +34,7 @@ public class DashboardFragment extends Fragment {
     ImageView imageAmount;
     TextView amount;
     DBHandler dbHandler;
+
 
     @SuppressLint({"Range", "SetTextI18n"})
     @Nullable
@@ -38,10 +44,14 @@ public class DashboardFragment extends Fragment {
         View view = inflater.inflate(R.layout.dashboard_fragment, container, false);
 
 
+
         toDate = view.findViewById(R.id.toDate);
         fromDate = view.findViewById(R.id.fromDate);
         imageAmount = view.findViewById(R.id.imageAmount);
         amount = view.findViewById(R.id.amount);
+
+
+        dbHandler = new DBHandler(getContext());
 
 
         toDate.setOnClickListener(new View.OnClickListener() {
@@ -62,7 +72,7 @@ public class DashboardFragment extends Fragment {
         Cursor cursor1 = dbHandler.calculateAllAmount();
         String result = "";
         if (cursor1.moveToNext()){
-            result = String.valueOf(cursor1.getInt(cursor1.getColumnIndex("TOTAL")));
+            result = String.valueOf((cursor1.getInt(cursor1.getColumnIndex("TOTALAMOUNT"))));
 
         }
 
@@ -76,7 +86,7 @@ public class DashboardFragment extends Fragment {
                 Cursor cursor11 = dbHandler.showAmount(String.valueOf(fromDate.getText()),String.valueOf(toDate.getText()));
                 String getResult = "";
                 if (cursor11.moveToNext()){
-                    getResult = String.valueOf(cursor11.getInt(cursor11.getColumnIndex("MYTOTAL")));
+                    getResult = String.valueOf((cursor11.getInt(cursor11.getColumnIndex("MYTOTAL"))));
                     amount.setText("BDT  "+getResult);
                 }
             }
@@ -84,8 +94,8 @@ public class DashboardFragment extends Fragment {
         });
 
 
-        return view;
-    }
+       return view;
+   }
 
     private void fromDate() {
         final Calendar calendar = Calendar.getInstance();
@@ -146,4 +156,7 @@ public class DashboardFragment extends Fragment {
             }
         });
     }
+
+
+
 }
