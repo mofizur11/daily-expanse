@@ -11,23 +11,22 @@ public class ExpanseModal {
     private String expanseAmount;
     private String expanseDate;
     private String expanseTime;
+    private String image;
 
 
     public ExpanseModal() {
     }
 
     // constructor
-    public ExpanseModal(int id, String expanseType, String expanseAmount, String expanseDate, String expanseTime) {
+
+    public ExpanseModal(int id, String expanseType, String expanseAmount, String expanseDate, String expanseTime, String image) {
         this.id = id;
         this.expanseType = expanseType;
         this.expanseAmount = expanseAmount;
         this.expanseDate = expanseDate;
         this.expanseTime = expanseTime;
-
+        this.image = image;
     }
-
-    // creating getter and setter methods
-
 
     public int getId() {
         return id;
@@ -67,5 +66,13 @@ public class ExpanseModal {
 
     public void setExpanseTime(String expanseTime) {
         this.expanseTime = expanseTime;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

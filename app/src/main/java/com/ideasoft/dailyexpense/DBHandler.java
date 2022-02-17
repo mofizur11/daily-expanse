@@ -17,7 +17,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String DB_NAME = "expanse_database";
 
     // below int is our database version
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 4;
 
     // below variable is for our table name.
     private static final String TABLE_NAME = "expanse_table";
@@ -38,6 +38,8 @@ public class DBHandler extends SQLiteOpenHelper {
     // below variable is for our id column.
     private static final String ID_COL = "id";
 
+    private static final String EXPENSE_DOCUMENT = "image";
+
 
     // creating a constructor for our database handler.
     public DBHandler(Context context) {
@@ -56,7 +58,8 @@ public class DBHandler extends SQLiteOpenHelper {
                 + EXPANSE_TYPE + " TEXT,"
                 + EXPANSE_AMOUNT + " TEXT,"
                 + EXPANSE_DATE + " TEXT,"
-                + EXPANSE_TIME + " TEXT)";
+                + EXPANSE_TIME + " TEXT,"
+                + EXPENSE_DOCUMENT + " TEXT)";
 
         // at last we are calling a exec sql
         // method to execute above sql query
@@ -64,7 +67,7 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     // this method is use to add new expanse to our sqlite database.
-    public void addNewExpanse(String expanseType, String expanseAmount, String expanseDate, String expanseTime) {
+    public void addNewExpanse(String expanseType, String expanseAmount, String expanseDate, String expanseTime, String image) {
 
         // on below line we are creating a variable for
         // our sqlite database and calling writable method
@@ -81,6 +84,7 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(EXPANSE_AMOUNT, expanseAmount);
         values.put(EXPANSE_DATE, expanseDate);
         values.put(EXPANSE_TIME, expanseTime);
+        values.put(EXPENSE_DOCUMENT, image);
 
         // after adding all values we are passing
         // content values to our table.
@@ -113,7 +117,8 @@ public class DBHandler extends SQLiteOpenHelper {
                             cursorExpanse.getString(1),
                             cursorExpanse.getString(2),
                             cursorExpanse.getString(3),
-                            cursorExpanse.getString(4)));
+                            cursorExpanse.getString(4),
+                            cursorExpanse.getString(5)));
                 } while (cursorExpanse.moveToNext());
                 // moving our cursor to next.
             }
@@ -155,13 +160,13 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
 
-    void delete_expense(int id) {
+   public void delete_expense(int id) {
         getWritableDatabase().delete(TABLE_NAME, ID_COL+"=?", new String[]{String.valueOf(id)});
 
     }
 
 
-    void update_expense(int id, String expenseType, String expenseAmount, String expenseDate, String expenseTime) {
+   public void update_expense(int id, String expenseType, String expenseAmount, String expenseDate, String expenseTime) {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(ID_COL, id);
@@ -171,6 +176,20 @@ public class DBHandler extends SQLiteOpenHelper {
         contentValues.put(EXPANSE_TIME, expenseTime);
         sqLiteDatabase.update(TABLE_NAME, contentValues, ID_COL+"=?", new String[]{String.valueOf(id)});
         sqLiteDatabase.close();
+    }
+
+
+    public Cursor calculateAllAmount(){
+        SQLiteDatabase sq = getReadableDatabase();
+        return sq.rawQuery("SELECT SUM("+EXPANSE_AMOUNT+") AS TOTAL FROM "+TABLE_NAME,null);
+    }
+
+    public Cursor showAmount(String fromDate,String toDate){
+
+        SQLiteDatabase sq = getReadableDatabase();
+        return sq.rawQuery("SELECT SUM("+EXPANSE_AMOUNT+") AS MYTOTAL FROM expanse_table WHERE date>=? and date<?",
+                new String[] { String.valueOf(fromDate), String.valueOf(toDate)});
+
     }
 
 
